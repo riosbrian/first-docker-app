@@ -1,0 +1,31 @@
+# Antes se agregaba la version: "3.8" pero no hace falta, docker utiliza la ultima version por defecto
+
+# 1. Definimos las imagenes que vamos a ejecutar
+# Le asignamos nombres, los que posteriormente utilizaremos para referenciarlos
+services:
+  # frontend
+  app:
+    build: ./frontend
+    ports:
+      - 80:8080
+    volumes:
+      - /frontend/src:/app/src
+  # backend
+  api:
+    build: ./backend
+    ports:
+      - 3000:3000
+    environment:
+      DB_URL: mongodb://db/gamify
+    volumes:
+      - ./backend/app:/app/app
+  # base de datos
+  db:
+    image: mongo:5.0.27-focal
+    ports:
+      - 27017:27017
+    volumes:
+      - gamify:/data/db
+
+volumes:
+  gamify:
